@@ -7,8 +7,6 @@
 <kubernetes-view-loading view-ready="ctrl.state.viewReady"></kubernetes-view-loading>
 
 <div ng-if="ctrl.state.viewReady">
-  <div ng-if="ctrl.state.isAdmin" ng-include="'app/kubernetes/templates/advancedDeploymentPanel.html'"></div>
-
   <div class="row">
     <div class="col-sm-12">
       <rd-widget>
@@ -16,7 +14,7 @@
           <uib-tabset active="ctrl.state.activeTab" justified="true" type="pills">
             <uib-tab index="0" classes="btn-sm" select="ctrl.selectTab(0)">
               <uib-tab-heading> <i class="fa fa-laptop-code space-right" aria-hidden="true"></i> Application </uib-tab-heading>
-              <div style="padding: 20px;">
+              <div style="padding: 20px">
                 <table class="table">
                   <tbody>
                     <tr>
@@ -34,7 +32,7 @@
                       <td>Resource pool</td>
                       <td>
                         <a ui-sref="kubernetes.resourcePools.resourcePool({ id: ctrl.application.ResourcePool })">{{ ctrl.application.ResourcePool }}</a>
-                        <span style="margin-left: 5px;" class="label label-info image-tag" ng-if="ctrl.isSystemNamespace(item)">system</span>
+                        <span style="margin-left: 5px" class="label label-info image-tag" ng-if="ctrl.isSystemNamespace(item)">system</span>
                       </td>
                     </tr>
                     <tr>
@@ -57,9 +55,7 @@
                     <tr ng-if="ctrl.application.Requests.Cpu || ctrl.application.Requests.Memory">
                       <td>
                         <div>Resource reservations</div>
-                        <div ng-if="ctrl.application.ApplicationType !== ctrl.KubernetesApplicationTypes.POD" class="text-muted small">
-                          per instance
-                        </div>
+                        <div ng-if="ctrl.application.ApplicationType !== ctrl.KubernetesApplicationTypes.POD" class="text-muted small"> per instance </div>
                       </td>
                       <td>
                         <div ng-if="ctrl.application.Requests.Cpu">CPU {{ ctrl.application.Requests.Cpu | kubernetesApplicationCPUValue }}</div>
@@ -69,7 +65,7 @@
                     <tr>
                       <td>Creation</td>
                       <td>
-                        <span ng-if="ctrl.application.ApplicationOwner" style="margin-right: 5px;"> <i class="fas fa-user"></i> {{ ctrl.application.ApplicationOwner }} </span>
+                        <span ng-if="ctrl.application.ApplicationOwner" style="margin-right: 5px"> <i class="fas fa-user"></i> {{ ctrl.application.ApplicationOwner }} </span>
                         <span> <i class="fas fa-clock"></i> {{ ctrl.application.CreationDate | getisodate }} </span>
                       </td>
                     </tr>
@@ -101,7 +97,7 @@
                             <div class="col-sm-12">
                               <button
                                 class="btn btn-primary btn-sm"
-                                style="margin-left: 0px;"
+                                style="margin-left: 0px"
                                 type="button"
                                 ng-click="ctrl.updateApplication()"
                                 ng-disabled="ctrl.formValues.Note === ctrl.application.Note"
@@ -136,8 +132,8 @@
 
             <uib-tab index="1" classes="btn-sm" select="ctrl.selectTab(1)">
               <uib-tab-heading> <i class="fas fa-compress-arrows-alt space-right" aria-hidden="true"></i> Placement </uib-tab-heading>
-              <div class="small text-muted" style="padding: 20px;">
-                <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+              <div class="small text-muted" style="padding: 20px">
+                <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px"></i>
                 The placement component helps you understand whether or not this application can be deployed on a specific node.
               </div>
               <kubernetes-application-placements-datatable
@@ -156,7 +152,7 @@
               <uib-tab-heading>
                 <i class="fa fa-history space-right" aria-hidden="true"></i> Events
                 <div ng-if="ctrl.hasEventWarnings()">
-                  <i class="fa fa-exclamation-circle orange-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+                  <i class="fa fa-exclamation-circle orange-icon" aria-hidden="true" style="margin-right: 2px"></i>
                   {{ ctrl.state.eventWarningCount }} warning(s)
                 </div>
               </uib-tab-heading>
@@ -174,7 +170,7 @@
 
             <uib-tab index="3" ng-if="ctrl.application.Yaml" select="ctrl.showEditor()" classes="btn-sm">
               <uib-tab-heading> <i class="fa fa-code space-right" aria-hidden="true"></i> YAML </uib-tab-heading>
-              <div style="padding-right: 25px;" ng-if="ctrl.state.showEditorTab">
+              <div style="padding-right: 25px" ng-if="ctrl.state.showEditorTab">
                 <kubernetes-yaml-inspector key="application-yaml" data="ctrl.application.Yaml"></kubernetes-yaml-inspector>
               </div>
             </uib-tab>
@@ -188,25 +184,23 @@
     <div class="col-sm-12">
       <rd-widget>
         <rd-widget-body>
-          <div ng-if="!ctrl.isExternalApplication() && !ctrl.isSystemNamespace()" style="margin-bottom: 15px;">
-            <button type="button" class="btn btn-sm btn-primary" ui-sref="kubernetes.applications.application.edit" style="margin-left: 0;">
+          <div ng-if="!ctrl.isExternalApplication() && !ctrl.isSystemNamespace()" style="margin-bottom: 15px">
+            <button type="button" class="btn btn-sm btn-primary" ui-sref="kubernetes.applications.application.edit" style="margin-left: 0">
               <i class="fa fa-file-code space-right" aria-hidden="true"></i>Edit this application
             </button>
-            <button type="button" class="btn btn-sm btn-primary" style="margin-left: 0;" ng-click="ctrl.redeployApplication()">
+            <button type="button" class="btn btn-sm btn-primary" style="margin-left: 0" ng-click="ctrl.redeployApplication()">
               <i class="fa fa-redo space-right" aria-hidden="true"></i>Redeploy
             </button>
-            <button type="button" class="btn btn-sm btn-primary" style="margin-left: 0;" ng-click="ctrl.rollbackApplication()" ng-disabled="ctrl.application.Revisions.length < 2">
+            <button type="button" class="btn btn-sm btn-primary" style="margin-left: 0" ng-click="ctrl.rollbackApplication()" ng-disabled="ctrl.application.Revisions.length < 2">
               <i class="fas fa-history space-right" aria-hidden="true"></i>Rollback to previous configuration
             </button>
           </div>
 
           <!-- ACCESSING APPLICATION -->
-          <div class="text-muted" style="margin-bottom: 15px;">
-            <i class="fa fa-external-link-alt" aria-hidden="true" style="margin-right: 2px;"></i> Accessing the application
-          </div>
+          <div class="text-muted" style="margin-bottom: 15px"> <i class="fa fa-external-link-alt" aria-hidden="true" style="margin-right: 2px"></i> Accessing the application </div>
 
-          <div class="small text-muted" ng-if="ctrl.application.PublishedPorts.length === 0" style="margin-bottom: 15px;">
-            <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+          <div class="small text-muted" ng-if="ctrl.application.PublishedPorts.length === 0" style="margin-bottom: 15px">
+            <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px"></i>
             This application is not exposing any port.
           </div>
 
@@ -214,12 +208,12 @@
             <!-- LB notice -->
             <div ng-if="ctrl.application.ServiceType === ctrl.KubernetesServiceTypes.LOAD_BALANCER">
               <div class="small text-muted">
-                <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+                <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px"></i>
                 This application is exposed through an external load balancer. Use the links below to access the different ports exposed.
               </div>
-              <div style="margin-top: 10px;" class="small text-muted">
+              <div style="margin-top: 10px" class="small text-muted">
                 <span ng-if="!ctrl.application.LoadBalancerIPAddress">
-                  <p> Load balancer status: <i class="fa fa-cog fa-spin" style="margin-left: 2px;"></i> pending </p>
+                  <p> Load balancer status: <i class="fa fa-cog fa-spin" style="margin-left: 2px"></i> pending </p>
                   <p>
                     <u>what does the "pending" status means?</u>
                     <portainer-tooltip
@@ -230,13 +224,13 @@
                   </p>
                 </span>
                 <span ng-if="ctrl.application.LoadBalancerIPAddress">
-                  <p> Load balancer status: <i class="fa fa-check green-icon" style="margin-left: 2px;"></i> available </p>
+                  <p> Load balancer status: <i class="fa fa-check green-icon" style="margin-left: 2px"></i> available </p>
                   <p>
                     Load balancer IP address: {{ ctrl.application.LoadBalancerIPAddress }}
-                    <span class="btn btn-primary btn-xs" ng-click="ctrl.copyLoadBalancerIP()" style="margin-left: 5px;">
+                    <span class="btn btn-primary btn-xs" ng-click="ctrl.copyLoadBalancerIP()" style="margin-left: 5px">
                       <i class="fa fa-copy space-right" aria-hidden="true"></i>Copy
                     </span>
-                    <span id="copyNotificationLB" style="margin-left: 7px; display: none; color: #23ae89;" class="small">
+                    <span id="copyNotificationLB" style="margin-left: 7px; display: none; color: #23ae89" class="small">
                       <i class="fa fa-check" aria-hidden="true"></i> copied
                     </span>
                   </p>
@@ -247,7 +241,7 @@
             <!-- cluster notice -->
             <div ng-if="ctrl.application.ServiceType === ctrl.KubernetesServiceTypes.NODE_PORT">
               <div class="small text-muted">
-                <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+                <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px"></i>
                 This application is exposed globally on all nodes of your cluster. It can be reached using the IP address of any node in your cluster using the port configuration
                 below.
               </div>
@@ -256,14 +250,14 @@
             <!-- internal notice -->
             <div ng-if="ctrl.application.ServiceType === ctrl.KubernetesServiceTypes.CLUSTER_IP && !ctrl.state.useIngress">
               <div class="small text-muted">
-                <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+                <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px"></i>
                 This application is only available for internal usage inside the cluster via the application name <code>{{ ctrl.application.ServiceName }}</code>
                 <span class="btn btn-primary btn-xs" ng-click="ctrl.copyApplicationName()"><i class="fa fa-copy space-right" aria-hidden="true"></i>Copy</span>
-                <span id="copyNotificationApplicationName" style="margin-left: 7px; display: none; color: #23ae89;" class="small"
+                <span id="copyNotificationApplicationName" style="margin-left: 7px; display: none; color: #23ae89" class="small"
                   ><i class="fa fa-check" aria-hidden="true"></i> copied</span
                 >
               </div>
-              <div class="small text-muted" style="margin-top: 2px;">
+              <div class="small text-muted" style="margin-top: 2px">
                 <p>Refer to the below port configuration to access the application.</p>
               </div>
             </div>
@@ -272,28 +266,28 @@
             <div ng-if="ctrl.application.ServiceType === ctrl.KubernetesServiceTypes.CLUSTER_IP && ctrl.state.useIngress">
               <div class="small text-muted">
                 <p>
-                  <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+                  <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px"></i>
                   This application is available for internal usage inside the cluster via the application name <code>{{ ctrl.application.ServiceName }}</code>
                   <span class="btn btn-primary btn-xs" ng-click="ctrl.copyApplicationName()"><i class="fa fa-copy space-right" aria-hidden="true"></i>Copy</span>
-                  <span id="copyNotificationApplicationName" style="margin-left: 7px; display: none; color: #23ae89;" class="small"
+                  <span id="copyNotificationApplicationName" style="margin-left: 7px; display: none; color: #23ae89" class="small"
                     ><i class="fa fa-check" aria-hidden="true"></i> copied</span
                   >
                 </p>
                 <p>It can also be accessed via specific HTTP route(s).</p>
               </div>
-              <div class="small text-muted" style="margin-top: 2px;">
+              <div class="small text-muted" style="margin-top: 2px">
                 <p>Refer to the below port configuration to access the application.</p>
               </div>
             </div>
 
             <!-- table -->
-            <div style="margin-top: 15px;">
+            <div style="margin-top: 15px">
               <table class="table">
                 <tbody>
                   <tr class="text-muted">
-                    <td style="width: 25%;">Container port</td>
-                    <td style="width: 25%;">{{ ctrl.application.ServiceType | kubernetesApplicationPortsTableHeaderText }} port</td>
-                    <td style="width: 50%;">HTTP route</td>
+                    <td style="width: 25%">Container port</td>
+                    <td style="width: 25%">{{ ctrl.application.ServiceType | kubernetesApplicationPortsTableHeaderText }} port</td>
+                    <td style="width: 50%">HTTP route</td>
                   </tr>
                   <tr ng-repeat-start="port in ctrl.application.PublishedPorts">
                     <td ng-if="!ctrl.portHasIngressRules(port)">{{ port.TargetPort }}/{{ port.Protocol }}</td>
@@ -308,7 +302,7 @@
                         ng-if="ctrl.application.LoadBalancerIPAddress"
                         ng-href="http://{{ ctrl.application.LoadBalancerIPAddress }}:{{ port.Port }}"
                         target="_blank"
-                        style="margin-left: 5px;"
+                        style="margin-left: 5px"
                       >
                         <i class="fa fa-external-link-alt" aria-hidden="true"></i> access
                       </a>
@@ -328,7 +322,7 @@
                         ng-if="ctrl.application.LoadBalancerIPAddress"
                         ng-href="http://{{ ctrl.application.LoadBalancerIPAddress }}:{{ port.Port }}"
                         target="_blank"
-                        style="margin-left: 5px;"
+                        style="margin-left: 5px"
                       >
                         <i class="fa fa-external-link-alt" aria-hidden="true"></i> access
                       </a>
@@ -341,7 +335,7 @@
                         tooltip-placement="bottom"
                         tooltip-class="portainer-tooltip"
                         uib-tooltip="Ingress controller IP address not available yet"
-                        style="cursor: pointer;"
+                        style="cursor: pointer"
                         >pending
                       </span>
                       <span ng-if="ctrl.ruleCanBeDisplayed(rule)">
@@ -357,21 +351,21 @@
           </div>
           <!-- !ACCESSING APPLICATION -->
           <!-- AUTO SCALING -->
-          <div class="text-muted" style="margin-bottom: 15px;"> <i class="fa fa-expand-arrows-alt" aria-hidden="true" style="margin-right: 2px;"></i> Auto-scaling</div>
+          <div class="text-muted" style="margin-bottom: 15px"> <i class="fa fa-expand-arrows-alt" aria-hidden="true" style="margin-right: 2px"></i> Auto-scaling</div>
 
-          <div class="small text-muted" ng-if="!ctrl.application.AutoScaler" style="margin-bottom: 15px;">
-            <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+          <div class="small text-muted" ng-if="!ctrl.application.AutoScaler" style="margin-bottom: 15px">
+            <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px"></i>
             This application does not have an autoscaling policy defined.
           </div>
 
           <div ng-if="ctrl.application.AutoScaler">
-            <div style="margin-top: 15px; width: 50%;">
+            <div style="margin-top: 15px; width: 50%">
               <table class="table">
                 <tbody>
                   <tr class="text-muted">
-                    <td style="width: 33%;">Minimum instances</td>
-                    <td style="width: 33%;">Maximum instances</td>
-                    <td style="width: 33%;">
+                    <td style="width: 33%">Minimum instances</td>
+                    <td style="width: 33%">Maximum instances</td>
+                    <td style="width: 33%">
                       Target CPU usage
                       <portainer-tooltip position="bottom" message="The autoscaler will ensure enough instances are running to maintain an average CPU usage across all instances.">
                       </portainer-tooltip>
@@ -389,21 +383,21 @@
           <!-- !AUTO SCALING -->
 
           <!-- CONFIGURATIONS -->
-          <div class="text-muted" style="margin-bottom: 15px; margin-top: 25px;"> <i class="fa fa-file-code" aria-hidden="true" style="margin-right: 2px;"></i> Configuration </div>
+          <div class="text-muted" style="margin-bottom: 15px; margin-top: 25px"> <i class="fa fa-file-code" aria-hidden="true" style="margin-right: 2px"></i> Configuration </div>
 
-          <div class="small text-muted" ng-if="!ctrl.application.Env.length > 0 && !ctrl.hasVolumeConfiguration()" style="margin-bottom: 15px;">
-            <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+          <div class="small text-muted" ng-if="!ctrl.application.Env.length > 0 && !ctrl.hasVolumeConfiguration()" style="margin-bottom: 15px">
+            <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px"></i>
             This application is not using any environment variable or configuration.
           </div>
 
           <table class="table" ng-if="ctrl.application.Env.length > 0">
             <tr class="text-muted">
-              <td style="width: 25%;">Container</td>
-              <td style="width: 25%;">Environment variable</td>
-              <td style="width: 25%;">Value</td>
-              <td style="width: 25%;">Configuration</td>
+              <td style="width: 25%">Container</td>
+              <td style="width: 25%">Environment variable</td>
+              <td style="width: 25%">Value</td>
+              <td style="width: 25%">Configuration</td>
             </tr>
-            <tbody ng-repeat="container in ctrl.application.Containers" style="border-top: 0;">
+            <tbody ng-repeat="container in ctrl.application.Containers" style="border-top: 0">
               <tr ng-repeat="envvar in container.Env track by $index">
                 <td>
                   {{ container.Name }}
@@ -448,13 +442,13 @@
 
           <table class="table" ng-if="ctrl.hasVolumeConfiguration()">
             <tr class="text-muted">
-              <td style="width: 25%;">Container</td>
-              <td style="width: 25%;">Configuration path</td>
-              <td style="width: 25%;">Value</td>
-              <td style="width: 25%;">Configuration</td>
+              <td style="width: 25%">Container</td>
+              <td style="width: 25%">Configuration path</td>
+              <td style="width: 25%">Value</td>
+              <td style="width: 25%">Configuration</td>
             </tr>
-            <tbody ng-repeat="container in ctrl.application.Containers" style="border-top: 0;">
-              <tr ng-repeat="volume in container.ConfigurationVolumes track by $index" style="border-top: 0;">
+            <tbody ng-repeat="container in ctrl.application.Containers" style="border-top: 0">
+              <tr ng-repeat="volume in container.ConfigurationVolumes track by $index" style="border-top: 0">
                 <td>
                   {{ container.Name }}
                   <span ng-if="container.Type === ctrl.KubernetesPodContainerTypes.INIT"
@@ -480,17 +474,15 @@
           <!-- !CONFIGURATIONS -->
 
           <!-- DATA PERSISTENCE -->
-          <div class="text-muted" style="margin-bottom: 15px; margin-top: 25px;">
-            <i class="fa fa-database" aria-hidden="true" style="margin-right: 2px;"></i> Data persistence
-          </div>
+          <div class="text-muted" style="margin-bottom: 15px; margin-top: 25px"> <i class="fa fa-database" aria-hidden="true" style="margin-right: 2px"></i> Data persistence </div>
 
           <div class="small text-muted" ng-if="!ctrl.hasPersistedFolders()">
-            <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
+            <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px"></i>
             This application has no persisted folders.
           </div>
 
           <div ng-if="ctrl.hasPersistedFolders()">
-            <div class="small text-muted" style="margin-bottom: 15px;">
+            <div class="small text-muted" style="margin-bottom: 15px">
               Data access policy: <i class="fa {{ ctrl.application.DataAccessPolicy | kubernetesApplicationDataAccessPolicyIcon }}" aria-hidden="true"></i>
               {{ ctrl.application.DataAccessPolicy | kubernetesApplicationDataAccessPolicyText }}
               <portainer-tooltip position="right" message="{{ ctrl.application.DataAccessPolicy | kubernetesApplicationDataAccessPolicyTooltip }}"> </portainer-tooltip>
@@ -498,10 +490,10 @@
 
             <table class="table" ng-if="ctrl.application.DataAccessPolicy === ctrl.ApplicationDataAccessPolicies.SHARED">
               <tr class="text-muted">
-                <td style="width: 33%;">Persisted folder</td>
-                <td style="width: 66%;">Persistence</td>
+                <td style="width: 33%">Persisted folder</td>
+                <td style="width: 66%">Persistence</td>
               </tr>
-              <tbody ng-repeat="container in ctrl.application.Containers" style="border-top: 0;">
+              <tbody ng-repeat="container in ctrl.application.Containers" style="border-top: 0">
                 <tr ng-repeat="volume in container.PersistedFolders track by $index">
                   <td>
                     {{ volume.MountPath }}
@@ -519,13 +511,13 @@
             <table class="table" ng-if="ctrl.application.DataAccessPolicy === ctrl.ApplicationDataAccessPolicies.ISOLATED">
               <thead>
                 <tr class="text-muted">
-                  <td style="width: 25%;">Container name</td>
-                  <td style="width: 25%;">Pod name</td>
-                  <td style="width: 25%;">Persisted folder</td>
-                  <td style="width: 25%;">Persistence</td>
+                  <td style="width: 25%">Container name</td>
+                  <td style="width: 25%">Pod name</td>
+                  <td style="width: 25%">Persisted folder</td>
+                  <td style="width: 25%">Persistence</td>
                 </tr>
               </thead>
-              <tbody ng-repeat="container in ctrl.allContainers track by $index" style="border-top: none;">
+              <tbody ng-repeat="container in ctrl.allContainers track by $index" style="border-top: none">
                 <tr ng-repeat="volume in container.PersistedFolders track by $index">
                   <td>
                     {{ container.Name }}
